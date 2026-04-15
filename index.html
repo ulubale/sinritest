@@ -6,74 +6,67 @@
     <title>恋愛診断：犬系か猫系か</title>
     <style>
         :root {
-            /* 配色の定義 */
-            --bg-pale-pink: #fff0f5;    /* 全体の背景：薄いピンク（ラベンダーローズ） */
-            --container-bg: #ffffff;    /* 診断エリアの背景：白 */
-            --border-bold-pink: #ff1493; /* 枠線・強調：濃いピンク（ディープピンク） */
-            --text-main: #333333;       /* メインの文字色：濃いグレー */
-            --text-sub: #666666;        /* サブの文字色：グレー */
+            /* 落ち着いたピンクの配色 */
+            --base-bg: #fff5f7;       /* 全体の背景：ごく薄いベビーピンク */
+            --accent-pink: #f08da5;   /* 枠線・ボタン：落ち着いた濃いめのピンク */
+            --box-bg: #ffffff;        /* 診断エリア背景：白 */
+            --text-color: #554444;    /* 文字色：少し赤みのあるグレー（落ち着いた印象） */
         }
 
         body {
             font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
-            /* 1. 背景を薄いピンクに */
-            background-color: var(--bg-pale-pink);
+            background-color: var(--base-bg);
+            /* 模様を完全に削除 */
+            background-image: none;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            color: var(--text-main);
+            color: var(--text-color);
         }
 
         .container {
-            width: 90%;
+            width: 92%;
             max-width: 500px;
-            background-color: var(--container-bg);
-            padding: 3rem 2rem;
-            border-radius: 25px;
-            /* 2. 濃いめのピンクで太めの枠線を作成 */
-            border: 8px solid var(--border-bold-pink);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            background-color: var(--box-bg);
+            padding: 2.5rem 1.5rem;
+            border-radius: 20px;
+            /* 少し濃いめのピンクで太めの枠 */
+            border: 6px solid var(--accent-pink);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             text-align: center;
-            box-sizing: border-box; /* 枠線を含めたサイズ計算 */
+            box-sizing: border-box;
         }
 
         h1 { 
-            font-size: 2.2rem; 
-            /* タイトルも濃いピンクに */
-            color: var(--border-bold-pink); 
-            margin-bottom: 1.5rem; 
+            font-size: 1.8rem; 
+            color: var(--accent-pink); 
+            margin-bottom: 1.2rem; 
             font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
-        p { line-height: 1.8; font-size: 1.1rem; color: var(--text-sub); margin-bottom: 1.5rem; }
+        p { line-height: 1.8; font-size: 1rem; margin-bottom: 1.5rem; }
 
-        /* ボタンのデザインも枠線に合わせる */
         .btn {
             display: inline-block;
-            padding: 18px 40px;
-            margin-top: 20px;
-            background-color: var(--border-bold-pink);
+            padding: 16px 40px;
+            margin-top: 15px;
+            background-color: var(--accent-pink);
             color: white;
             text-decoration: none;
-            border-radius: 50px;
+            border-radius: 12px;
             font-weight: bold;
             cursor: pointer;
             border: none;
-            transition: all 0.3s ease;
-            font-size: 1.2rem;
-            box-shadow: 0 5px 15px rgba(255, 20, 147, 0.3);
+            transition: 0.3s;
+            font-size: 1.1rem;
         }
 
         .btn:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 8px 20px rgba(255, 20, 147, 0.5);
-            background-color: #ff69b4; /* ホバー時は少し明るく */
+            opacity: 0.85;
+            transform: translateY(-2px);
         }
-        
-        .btn:active { transform: translateY(1px); }
 
         .hidden { display: none; }
 
@@ -81,64 +74,50 @@
         .option-btn {
             display: block;
             width: 100%;
-            padding: 20px;
-            margin-bottom: 15px;
+            padding: 18px;
+            margin-bottom: 12px;
             background-color: #fff;
-            /* 選択肢の枠線は少し薄く */
-            border: 2px solid #ffb6c1; 
-            color: var(--text-main);
+            border: 2px solid #eee;
+            color: var(--text-color);
             text-align: left;
-            border-radius: 15px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 1rem;
+            transition: 0.2s;
+            font-size: 0.95rem;
             line-height: 1.5;
-            box-sizing: border-box;
         }
         .option-btn:hover { 
-            background-color: var(--bg-pale-pink); 
-            border-color: var(--border-bold-pink);
-            color: var(--border-bold-pink);
-            font-weight: bold;
+            background-color: #fff9fa;
+            border-color: var(--accent-pink);
+            color: var(--accent-pink);
         }
 
         #progress { 
-            font-size: 1.1rem; 
-            color: var(--border-bold-pink); 
-            font-weight: bold; 
-            margin-bottom: 15px; 
-            letter-spacing: 0.1em;
-        }
-
-        .question-box {
-            text-align: left;
+            font-size: 0.9rem; 
+            color: #aaa; 
+            margin-bottom: 10px;
+            font-weight: bold;
         }
 
         .result-title { 
-            font-size: 1.8rem; 
+            font-size: 1.5rem; 
             font-weight: bold; 
             margin: 1.5rem 0; 
-            color: #d2691e; /* 結果タイトルは少し落ち着いた色に */
+            color: var(--accent-pink);
         }
         .result-desc { 
-            padding: 25px; 
-            border-radius: 15px; 
+            padding: 20px; 
+            border-radius: 12px; 
             text-align: left; 
-            line-height: 1.9; 
-            background-color: var(--bg-pale-pink);
-            border: 2px solid #ffb6c1;
-            color: var(--text-main);
+            line-height: 1.8; 
+            background-color: #fffcfd;
+            border: 1px solid #f9ecee;
         }
 
         .twitter-share { 
-            background-color: #000000; /* Xは黒 */
-            border: none;
-            margin-top: 30px; 
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        .twitter-share:hover {
-            background-color: #333333;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            background-color: #111; 
+            margin-top: 25px; 
+            font-size: 1rem;
         }
     </style>
 </head>
@@ -147,13 +126,13 @@
     <div id="start-screen" class="container">
         <h1>💞 恋愛診断 💞<br>犬系か猫系か</h1>
         <p>「好きなら全部見せてよ？」<br>愛の重さも、執着も、独占欲も。<br>あなたの深層心理を丸裸にする15問。</p>
-        <button class="btn" onclick="startQuiz()">診断を開始するッ！</button>
+        <button class="btn" onclick="startQuiz()">診断を開始する</button>
     </div>
 
     <div id="quiz-screen" class="container hidden">
         <div id="progress">1 / 15</div>
         <div class="question-box">
-            <p id="question-text" style="font-size: 1.2rem; color: var(--text-main); font-weight: bold;"></p>
+            <p id="question-text" style="font-weight: bold; margin-bottom: 20px;"></p>
             <div class="options">
                 <button class="option-btn" onclick="nextQuestion('A')" id="optA"></button>
                 <button class="option-btn" onclick="nextQuestion('B')" id="optB"></button>
@@ -167,13 +146,12 @@
             <div class="result-title" id="res-type"></div>
             <div class="result-desc" id="res-desc"></div>
         </div>
-        <button class="btn twitter-share" onclick="shareTwitter()">結果をXで晒す</button>
+        <button class="btn twitter-share" onclick="shareTwitter()">結果をXでシェア</button>
         <br>
-        <button class="btn" style="background-color: #666; margin-top: 15px; font-size: 1rem; padding: 12px 30px;" onclick="location.reload()">もう一度やる</button>
+        <button class="btn" style="background-color: #888; margin-top: 15px; font-size: 0.9rem;" onclick="location.reload()">もう一度やる</button>
     </div>
 
     <script>
-        // 質問内容は前回と同じ（具体的・ヤンデレ系）
         const questions = [
             { q: "恋人と会う時のテンションは？", a: "「ねぇねぇ！次どこ行く？」と自分からガンガン予定を詰め込みたい。", b: "相手が誘ってくれるのをじっと待つ。誘われないと密かに絶望する。" },
             { q: "好きな人への「好き」の伝え方は？", a: "誰が見てもバレバレ。全力で尻尾を振る勢いで愛情表現する。", b: "普段は塩対応。でも二人きりの時だけは、喉を鳴らすように甘える。" },
@@ -187,7 +165,7 @@
             { q: "「仕事と私、どっちが大事？」という質問について", a: "相手を困らせたくないから、心の中でも思わない。", b: "本気で「私を一番に優先して」と要求する。仕事に嫉妬して病む。" },
             { q: "恋人がSNSで異性の投稿に「いいね」をしてた…", a: "特に気にしない。単なるSNSの付き合いだと思う。", b: "即座に問い詰める。「なんでその人にいいねしたの？」「私のこと嫌いなの？」" },
             { q: "もし、別れを切り出されたらどうする？", a: "ボロボロに泣くけど、最後は相手の幸せを願って身を引く。", b: "「死ぬまで別れないよ？」と微笑むか、相手が後悔するまで執着し続ける。" },
-            { q: "恋人と位置情報を共有することになったら？", a: "待ち合わせに便利そうだし、抵抗なくOKする。", b: "大歓迎。24時間どこで何をしているか監視して、安心したい。" },
+            { q: "恋人と位置情報を共有することになったら？", a: "待ち合わせに便利そうだし、特に抵抗なくOKする。", b: "大歓迎。24時間どこで何をしているか監視して、安心したい。" },
             { q: "恋人が知らない人と仲良く話しているのを見かけたら？", a: "後で「さっきの人だれー？」と明るく聞く。", b: "その場で割り込んで、相手を睨みつけるか、恋人を無理やり連れ出す。" },
             { q: "自分の恋愛気質を一言で言うなら？", a: "一途でまっすぐ。相手を信じてどこまでも付いていく大型犬。", b: "自由奔放で独占欲が強い。自分のテリトリーに他人が入るのを許さない黒猫。" }
         ];
@@ -230,10 +208,10 @@
 
             if (scoreA >= 11) {
                 type = "【純愛の暴走機関車！犬系タイプ】";
-                desc = "あなたは感情表現が豊かな愛されキャラ。でも、その「好き」は時に暴走します。寂しさが極まると、相手を窒息させるほどの構ってちゃんに変貌するヤバさを秘めています。";
+                desc = "あなたは一途で素直な愛されキャラ。でも、その「好き」は時に暴走します。寂しさが極まると、相手を窒息させるほどの構ってちゃんに変貌する危うさを秘めています。";
             } else if (scoreB >= 11) {
                 type = "【支配欲の黒魔術師！猫系タイプ】";
-                desc = "ミステリアスな皮を被った、超・独占欲モンスター。相手を自分のテリトリーに閉じ込め、自分なしでは生きられないように調教したい……そんなヤンデレ気質が爆発寸前です。";
+                desc = "ミステリアスな皮を被った、独占欲モンスター。相手を自分のテリトリーに閉じ込め、自分なしでは生きられないようにしたい……そんなヤンデレ気質が爆発寸前です。";
             } else {
                 type = "【繊細な孤独の化身！うさぎ系タイプ】";
                 desc = "一見バランスが良いように見えて、実は一番「放置厳禁」なタイプ。自分からは言わないけれど、相手が察してくれないと静かに、そして深く病んでいく闇を抱えています。";
