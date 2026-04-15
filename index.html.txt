@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>恋愛診断：犬系か猫系か</title>
+    <style>
+        :root {
+            --primary-bg: #1a1a2e;
+            --card-bg: #16213e;
+            --accent-dog: #ff9a8b;
+            --accent-cat: #a18cd1;
+            --text-color: #ffffff;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        h1 { font-size: 1.8rem; color: var(--accent-dog); margin-bottom: 1.5rem; }
+        p { line-height: 1.6; font-size: 1rem; color: #ccc; }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            margin-top: 20px;
+            background: linear-gradient(45deg, var(--accent-dog), var(--accent-cat));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+            font-size: 1.1rem;
+        }
+
+        .btn:hover { transform: scale(1.05); opacity: 0.9; }
+        .hidden { display: none; }
+
+        .options { margin-top: 1.5rem; text-align: left; }
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            margin-bottom: 12px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            text-align: left;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+        .option-btn:hover { background: rgba(255,255,255,0.2); border-color: var(--accent-dog); }
+
+        #progress { font-size: 0.9rem; color: #888; margin-bottom: 10px; }
+        .result-title { font-size: 1.4rem; font-weight: bold; margin: 1.5rem 0; color: var(--accent-dog); }
+        .result-desc { background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; text-align: left; line-height: 1.7; }
+
+        .twitter-share { background: #000; margin-top: 25px; border: 1px solid #333; }
+    </style>
+</head>
+<body>
+
+    <div id="start-screen" class="container">
+        <h1>恋愛診断<br>犬系か猫系か</h1>
+        <p>あなたは忠実なワンちゃんタイプ？<br>それとも気まぐれなネコちゃんタイプ？<br><br>深層心理と「執着度」まで暴き出す、全15問のテスト。</p>
+        <button class="btn" onclick="startQuiz()">診断をはじめる</button>
+    </div>
+
+    <div id="quiz-screen" class="container hidden">
+        <div id="progress">1 / 15</div>
+        <div class="question-box">
+            <p id="question-text" style="font-size: 1.2rem; font-weight: bold; color: white;"></p>
+            <div class="options">
+                <button class="option-btn" onclick="nextQuestion('A')" id="optA"></button>
+                <button class="option-btn" onclick="nextQuestion('B')" id="optB"></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="result-screen" class="container hidden">
+        <h1>診断結果</h1>
+        <div id="result-content">
+            <div class="result-title" id="res-type"></div>
+            <div class="result-desc" id="res-desc"></div>
+        </div>
+        <button class="btn twitter-share" onclick="shareTwitter()">X (Twitter) で結果をシェア</button>
+        <br>
+        <button class="btn" style="background: #444; margin-top: 15px; font-size: 0.9rem;" onclick="location.reload()">最初からやり直す</button>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "友達や恋人と会う時は？", a: "自分から積極的に誘う", b: "相手から誘われるのを待つ" },
+            { q: "好きな人への態度は？", a: "全力で「好き」をアピールする", b: "二人きりの時だけ甘える" },
+            { q: "休日の過ごし方の理想は？", a: "外に出て誰かと過ごしたい", b: "家で一人の時間を楽しみたい" },
+            { q: "連絡（LINEなど）の頻度は？", a: "返信は早い。やり取りを続けたい", b: "自分のペースで返したい" },
+            { q: "褒められた時の反応は？", a: "素直にめちゃくちゃ喜ぶ", b: "謙遜しつつ内心ニヤリとする" },
+            { q: "恋人が他の異性とゲームしてたら？", a: "特に気にしない", b: "どうにかなりそうになり病む" },
+            { q: "返信が3時間来ない時…", a: "忙しいのかなと自分の時間を楽しむ", b: "不安で何も手につかなくなる" },
+            { q: "恋人のスマホが見られるなら？", a: "絶対に見ない", b: "中身をくまなくチェックしたい" },
+            { q: "愛の重さについての持論は？", a: "適度な重さが一番", b: "重すぎて引かれるくらいが幸せ" },
+            { q: "「仕事と私どっちが大事？」", a: "冗談でも言わない", b: "本気で「私を選んで」と言ってしまう" },
+            { q: "恋人が他人の容姿を褒めたら？", a: "「そうだね」と共感する", b: "嫉妬して不機嫌になる" },
+            { q: "別れ話が出た時の反応は？", a: "悲しいけど相手を尊重する", b: "絶対に拒絶。心中すら考える" },
+            { q: "GPSでの位置共有は？", a: "監視されているようで嫌", b: "安心するから24時間把握したい" },
+            { q: "SNSでの恋人の交友関係は？", a: "特に気にしない", b: "全員把握し、異性はブロックさせたい" },
+            { q: "自分の本質を例えるなら？", a: "忠実な大型犬", b: "自由で支配的な猫" }
+        ];
+
+        let currentIdx = 0;
+        let scoreA = 0;
+        let scoreB = 0;
+
+        function startQuiz() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            document.getElementById('progress').innerText = (currentIdx + 1) + " / " + questions.length;
+            document.getElementById('question-text').innerText = questions[currentIdx].q;
+            document.getElementById('optA').innerText = "A: " + questions[currentIdx].a;
+            document.getElementById('optB').innerText = "B: " + questions[currentIdx].b;
+        }
+
+        function nextQuestion(choice) {
+            if(choice === 'A') scoreA++;
+            else scoreB++;
+
+            currentIdx++;
+            if(currentIdx < questions.length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            let type = "";
+            let desc = "";
+
+            if (scoreA >= 11) {
+                type = "【忠実な愛されキャラ！犬系タイプ】";
+                desc = "あなたは感情表現が豊かで誠実な人。でも寂しさが極まると「構ってちゃん」が加速し、しっぽを振りすぎて相手を疲れさせてしまうかも…？";
+            } else if (scoreB >= 11) {
+                type = "【自由奔放なツンデレ！猫系タイプ】";
+                desc = "ミステリアスな魅力を持つあなた。独占欲は人一倍で、一度「自分のもの」と決めた相手への執着は、誰にも止められない禁断レベルかも。";
+            } else {
+                type = "【ハイブリッド！うさぎ系タイプ】";
+                desc = "人懐っこさと繊細さを併せ持つ、孤独に弱いタイプ。放置されると精神的に枯れてしまうので、常に愛情確認を求めてしまう傾向があります。";
+            }
+
+            document.getElementById('res-type').innerText = type;
+            document.getElementById('res-desc').innerText = desc;
+        }
+
+        function shareTwitter() {
+            const result = document.getElementById('res-type').innerText;
+            const text = encodeURIComponent("恋愛診断「犬系か猫系か」の結果は..." + result + "\\n#犬猫恋愛診断 #心理テスト");
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+        }
+    </script>
+</body>
+</html>
